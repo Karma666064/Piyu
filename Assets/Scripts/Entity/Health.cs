@@ -9,21 +9,23 @@ public class Health : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
 
+    [SerializeField] private List<GameObject> quartHearts = new List<GameObject>();
+
+    [SerializeField] private GameObject heartContainerPrefab;
     [SerializeField] private GameObject quartHeartPrefab;
-    private List<GameObject> quartHearts = new List<GameObject>();
 
     private void Start()
     {
-        healthBar = gameObject.GetComponentsInChildren<GameObject>()[0];
-
-        for (int i = 1; i <= maxHealth; i++)
+        for (int i = 0; i < maxHealth / 4; i++)
         {
-            quartHearts.Add(quartHeartPrefab);
-        }
+            GameObject heartContainer = Instantiate(heartContainerPrefab, healthBar.transform);
 
-        foreach (var quartHeart in quartHearts)
-        {
-            Instantiate(quartHeart, healthBar.transform);
+            for (int j = 0; j < 4; j++)
+            {
+                GameObject quartHeartObj = Instantiate(quartHeartPrefab, heartContainer.transform);
+
+                quartHearts.Add(quartHeartObj);
+            }
         }
     }
 
@@ -33,7 +35,7 @@ public class Health : MonoBehaviour
 
         if (healthTarget == null) return;
 
-        healthTarget.currentHealth += health;
+        healthTarget.currentHealth = health;
 
         HealthBarUpdate();
     }
