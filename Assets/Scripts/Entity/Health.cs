@@ -29,38 +29,35 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void UpdateHealth(GameObject target, int health)
+    public void UpdateHealth(int health)
     {
-        Health healthTarget = target.GetComponent<Health>();
-
-        if (healthTarget == null) return;
-
-        healthTarget.currentHealth = health;
+        currentHealth = Mathf.Clamp(health, 0, maxHealth);
 
         HealthBarUpdate();
     }
 
-    public void MaxHeal(GameObject target)
+    public void MaxHeal()
     {
-        Health healthTarget = target.GetComponent<Health>();
-
-        if (healthTarget == null) return;
-
-        healthTarget.currentHealth = maxHealth;
+        currentHealth = maxHealth;
 
         HealthBarUpdate();
     }
 
     public void HealthBarUpdate()
     {
-        for (int i = 0; i <= maxHealth; i++)
-        {
-            quartHearts[i].SetActive(false);
-        }
+        //for (int i = 0; i <= maxHealth; i++)
+        //{
+        //    quartHearts[i].SetActive(false);
+        //}
 
-        for (int i = 0; i <= currentHealth; i++)
+        //for (int i = 0; i <= currentHealth; i++)
+        //{
+        //    quartHearts[i].SetActive(true);
+        //}
+
+        for (int i = 0; i < quartHearts.Count; i++)
         {
-            quartHearts[i].SetActive(true);
+            quartHearts[i].SetActive(i < currentHealth);
         }
     }
 }

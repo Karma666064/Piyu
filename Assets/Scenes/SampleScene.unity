@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 367501424}
   - component: {fileID: 367501423}
   - component: {fileID: 367501422}
+  - component: {fileID: 367501427}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -292,6 +293,7 @@ MonoBehaviour:
   healthBar: {fileID: 1257050138}
   maxHealth: 8
   currentHealth: 8
+  quartHearts: []
   heartContainerPrefab: {fileID: 30767746377061182, guid: 6ecd965305c1af1418f2cc2b37a589d4, type: 3}
   quartHeartPrefab: {fileID: 4463504761689554973, guid: 24352adc548a6b140bde45a2492e63f4, type: 3}
 --- !u!114 &367501426
@@ -304,6 +306,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df9c7665e49df054a9758957a521d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &367501427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367501418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41a54e5e523205b46b706ff04baf1709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &512474278
