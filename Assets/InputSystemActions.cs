@@ -866,6 +866,74 @@ public partial class @PlayerSystemAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Cheat"",
+            ""id"": ""54070afe-20ee-43f2-a100-6b8248c381bf"",
+            ""actions"": [
+                {
+                    ""name"": ""Make Damage"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9ccadac-89a9-4980-afe9-4e621b4c3e37"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Heal"",
+                    ""type"": ""Button"",
+                    ""id"": ""1cf9fdd2-ad98-4a38-b8ba-e9015e17bb02"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Full Heal"",
+                    ""type"": ""Button"",
+                    ""id"": ""df00b0ea-e536-4eae-834f-22d7dd75a4b2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0d66d796-2434-46a9-8f0b-09e6da248fda"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Make Damage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""622974c5-b369-434f-81d7-d3dd280ce779"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""00bc065c-a858-42fd-8424-9a920689b26d"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Full Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -950,12 +1018,18 @@ public partial class @PlayerSystemAction: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Cheat
+        m_Cheat = asset.FindActionMap("Cheat", throwIfNotFound: true);
+        m_Cheat_MakeDamage = m_Cheat.FindAction("Make Damage", throwIfNotFound: true);
+        m_Cheat_Heal = m_Cheat.FindAction("Heal", throwIfNotFound: true);
+        m_Cheat_FullHeal = m_Cheat.FindAction("Full Heal", throwIfNotFound: true);
     }
 
     ~@PlayerSystemAction()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerSystemAction.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerSystemAction.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Cheat.enabled, "This will cause a leak and performance issues, PlayerSystemAction.Cheat.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -1209,6 +1283,68 @@ public partial class @PlayerSystemAction: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Cheat
+    private readonly InputActionMap m_Cheat;
+    private List<ICheatActions> m_CheatActionsCallbackInterfaces = new List<ICheatActions>();
+    private readonly InputAction m_Cheat_MakeDamage;
+    private readonly InputAction m_Cheat_Heal;
+    private readonly InputAction m_Cheat_FullHeal;
+    public struct CheatActions
+    {
+        private @PlayerSystemAction m_Wrapper;
+        public CheatActions(@PlayerSystemAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MakeDamage => m_Wrapper.m_Cheat_MakeDamage;
+        public InputAction @Heal => m_Wrapper.m_Cheat_Heal;
+        public InputAction @FullHeal => m_Wrapper.m_Cheat_FullHeal;
+        public InputActionMap Get() { return m_Wrapper.m_Cheat; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CheatActions set) { return set.Get(); }
+        public void AddCallbacks(ICheatActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CheatActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CheatActionsCallbackInterfaces.Add(instance);
+            @MakeDamage.started += instance.OnMakeDamage;
+            @MakeDamage.performed += instance.OnMakeDamage;
+            @MakeDamage.canceled += instance.OnMakeDamage;
+            @Heal.started += instance.OnHeal;
+            @Heal.performed += instance.OnHeal;
+            @Heal.canceled += instance.OnHeal;
+            @FullHeal.started += instance.OnFullHeal;
+            @FullHeal.performed += instance.OnFullHeal;
+            @FullHeal.canceled += instance.OnFullHeal;
+        }
+
+        private void UnregisterCallbacks(ICheatActions instance)
+        {
+            @MakeDamage.started -= instance.OnMakeDamage;
+            @MakeDamage.performed -= instance.OnMakeDamage;
+            @MakeDamage.canceled -= instance.OnMakeDamage;
+            @Heal.started -= instance.OnHeal;
+            @Heal.performed -= instance.OnHeal;
+            @Heal.canceled -= instance.OnHeal;
+            @FullHeal.started -= instance.OnFullHeal;
+            @FullHeal.performed -= instance.OnFullHeal;
+            @FullHeal.canceled -= instance.OnFullHeal;
+        }
+
+        public void RemoveCallbacks(ICheatActions instance)
+        {
+            if (m_Wrapper.m_CheatActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICheatActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CheatActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CheatActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CheatActions @Cheat => new CheatActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1274,5 +1410,11 @@ public partial class @PlayerSystemAction: IInputActionCollection2, IDisposable
         void OnScrollWheel(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface ICheatActions
+    {
+        void OnMakeDamage(InputAction.CallbackContext context);
+        void OnHeal(InputAction.CallbackContext context);
+        void OnFullHeal(InputAction.CallbackContext context);
     }
 }
