@@ -16,6 +16,8 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
+        currentHealth = maxHealth;
+
         for (int i = 0; i < maxHealth / 4; i++)
         {
             GameObject heartContainer = Instantiate(heartContainerPrefab, healthBar.transform);
@@ -45,16 +47,6 @@ public class Health : MonoBehaviour
 
     public void HealthBarUpdate()
     {
-        //for (int i = 0; i <= maxHealth; i++)
-        //{
-        //    quartHearts[i].SetActive(false);
-        //}
-
-        //for (int i = 0; i <= currentHealth; i++)
-        //{
-        //    quartHearts[i].SetActive(true);
-        //}
-
         for (int i = 0; i < quartHearts.Count; i++)
         {
             quartHearts[i].SetActive(i < currentHealth);
