@@ -79,11 +79,6 @@ public class PlayerJump : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, verticalMoveInput * playerMove.GetSpeed());
                 rb.gravityScale = 0f;
             }
-            else // sliding
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, -2);
-                rb.gravityScale = 0f;
-            }
         }
         else
         {
