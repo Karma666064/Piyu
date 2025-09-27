@@ -27,6 +27,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private int currentIndex;
     private Transform currentTarget;
+    private float lastPos;
 
     private void Start()
     {
@@ -38,26 +39,28 @@ public class EnemyPatrol : MonoBehaviour
             currentIndex = 0;
             currentTarget = posPoints[currentIndex];
         }
+
+        lastPos = transform.position.x;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Collider2D isPlayerTargeted = Physics2D.OverlapCircle(detectorObj.position, detectorRadius, playerLayer);
         float oldSpeed = speed;
 
         if (isPlayerTargeted)
         { 
-            Vector2 moveDir = (player.position - gameObject.transform.position).normalized;
+            Vector2 moveDir = (player.position - transform.position).normalized;
             Vector2 velocity = rb.linearVelocity;
 
-
+            // je dois mettre un truc ici me=ais j'ai oublier
 
             velocity.x = Mathf.Lerp(velocity.x, moveDir.x * speed, Time.fixedDeltaTime * (speed - 2));
             rb.linearVelocity = velocity;
         }
         else
         {
-            Vector2 moveDir = (currentTarget.position - gameObject.transform.position).normalized;
+            Vector2 moveDir = (currentTarget.position - transform.position).normalized;
             Vector2 velocity = rb.linearVelocity;
 
             speed = oldSpeed;
@@ -70,6 +73,13 @@ public class EnemyPatrol : MonoBehaviour
                 SetupNextPos();
             }
         }
+
+        float currentPos = transform.position.x;
+
+        if (lastPos < currentPos && transform.localScale.x < 0) Flip();
+        else if (lastPos > currentPos && transform.localScale.x > 0) Flip();
+
+        lastPos = currentPos;
     }
 
     void SetupNextPos()
@@ -88,6 +98,13 @@ public class EnemyPatrol : MonoBehaviour
         {
             currentTarget = posPoints[currentIndex];
         }
+    }
+
+    public void Flip()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 
     void OnDrawGizmosSelected()

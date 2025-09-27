@@ -31,8 +31,8 @@ public class PlayerMove : MonoBehaviour
         rb.linearVelocity = velocity;
 
         // Regard du personnage 
-        if (moveInput.x > 0.1f) isFacingRight = true;
-        else if (moveInput.x < -0.1f) isFacingRight = false;
+        if (moveInput.x > 0.1f && transform.localScale.x < 0) Flip();
+        else if (moveInput.x < -0.1f && transform.localScale.x > 0) Flip();
     }
 
     void OnMove(InputAction.CallbackContext context)
@@ -43,5 +43,12 @@ public class PlayerMove : MonoBehaviour
     public float GetSpeed()
     {
         return speed;
+    }
+
+    public void Flip()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }
