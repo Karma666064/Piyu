@@ -11,7 +11,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float speed = 9f;
     [SerializeField] private float acceleration = 4f;
 
-    [SerializeField] private bool isFacingRight;
+    [SerializeField] private bool isFacingRight = true;
 
     void Awake()
     {
@@ -31,8 +31,16 @@ public class PlayerMove : MonoBehaviour
         rb.linearVelocity = velocity;
 
         // Regard du personnage 
-        if (moveInput.x > 0.1f && transform.localScale.x < 0) Flip();
-        else if (moveInput.x < -0.1f && transform.localScale.x > 0) Flip();
+        if (moveInput.x > 0.1f && transform.localScale.x < 0)
+        {
+            isFacingRight = true;
+            Flip();
+        }
+        else if (moveInput.x < -0.1f && transform.localScale.x > 0)
+        {
+            isFacingRight = false;
+            Flip();
+        }
     }
 
     void OnMove(InputAction.CallbackContext context)
@@ -45,6 +53,11 @@ public class PlayerMove : MonoBehaviour
         return speed;
     }
 
+    public bool GetIsFacingRight()
+    {
+        return isFacingRight;
+    }
+
     public void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -52,3 +65,8 @@ public class PlayerMove : MonoBehaviour
         transform.localScale = scale;
     }
 }
+
+/*
+ * Things to modify
+ * - Mettre 2 wall detector pour savoir si je m'acroche sur la gauche & droite
+*/
