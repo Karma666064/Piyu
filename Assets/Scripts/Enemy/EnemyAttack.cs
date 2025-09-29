@@ -24,6 +24,9 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] private List<int> damageProbabilities = new List<int>() { 50, 30, 20 };
     [SerializeField] private float bulletLifeTime = 2f;
 
+    public enum EnemyType { Swordman, Gunner, Turret };
+    public EnemyType enemyType;
+
     private void Start()
     {
         orientationEntity = GetComponent<OrientationEntity>();
@@ -47,11 +50,28 @@ public class EnemyAttack : MonoBehaviour
     {
         while (isPlayerTargeted)
         {
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-            bullet.GetComponent<TriggerDamage>().damageToMake = randomSelector.ChooseWithWeights<int>(damages, damageProbabilities);
-            bullet.GetComponent<TriggerDamage>().shooter = gameObject;
-            bullet.GetComponent<BulletMovement>().lifeTime = bulletLifeTime;
-            bullet.GetComponent<BulletMovement>().isFacingRight = orientationEntity.isFacingRight;
+            switch (enemyType)
+            {
+                case EnemyType.Swordman:
+                    Debug.Log("Swordman Attack");
+
+                    break;
+                case EnemyType.Turret:
+                    Debug.Log("Turret Attack");
+
+                    break;
+                case EnemyType.Gunner:
+                    GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                    bullet.GetComponent<TriggerDamage>().damageToMake = randomSelector.ChooseWithWeights<int>(damages, damageProbabilities);
+                    bullet.GetComponent<TriggerDamage>().shooter = gameObject;
+                    bullet.GetComponent<BulletMovement>().lifeTime = bulletLifeTime;
+                    bullet.GetComponent<BulletMovement>().isFacingRight = orientationEntity.isFacingRight;
+
+                    break;
+                default:
+                    break;
+            }
+            
             yield return new WaitForSeconds(enemyAttackTime);
         }
     }
