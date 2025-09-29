@@ -274,6 +274,7 @@ MonoBehaviour:
   damages: 010000000200000003000000
   damageProbabilities: 320000001e00000014000000
   bulletLifeTime: 2
+  enemyType: 1
 --- !u!114 &124399840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,8 +591,8 @@ GameObject:
   - component: {fileID: 404622783}
   - component: {fileID: 404622782}
   - component: {fileID: 404622780}
-  - component: {fileID: 404622779}
   - component: {fileID: 404622786}
+  - component: {fileID: 404622779}
   m_Layer: 0
   m_Name: Enemy SwordMan
   m_TagString: Enemy
@@ -740,7 +741,6 @@ Transform:
   m_Children:
   - {fileID: 2131300059}
   - {fileID: 1761356942}
-  - {fileID: 1131242411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &404622786
@@ -752,11 +752,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 404622778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27a23e10449553f4bbef11fe50454a8f, type: 3}
+  m_Script: {fileID: 11500000, guid: 524f6a021378c54459089f680c6e20ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swordDetector: {fileID: 1131242411}
-  detectorSize: {x: 1, y: 0.6, z: 0}
+  detectorObj: {fileID: 1761356942}
+  detectorRadius: 9
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  enemyAttackTime: 1
+  isFacingRight: 1
+  bulletPrefab: {fileID: 0}
+  damages: 010000000200000003000000
+  damageProbabilities: 320000001e00000014000000
+  bulletLifeTime: 2
+  enemyType: 0
 --- !u!1 &512474278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1656,37 +1666,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1131242410
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1131242411}
-  m_Layer: 0
-  m_Name: Sword Detector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1131242411
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1131242410}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 404622785}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1257050138 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2819109404862386005, guid: 9fc4e32adef1ebc41bfc1250042c0bb2, type: 3}
