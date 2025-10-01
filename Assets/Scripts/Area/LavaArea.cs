@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class LavaArea : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private float speed = 0.5f;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        //Vector3 direction = isFacingRight ? Vector3.right : Vector3.left;
+        transform.Translate(Vector3.up * speed * Time.deltaTime, Space.World);
     }
 }
